@@ -57,11 +57,23 @@ A correct `eval.js` prints exactly this table. If your numbers differ, your metr
 
 ## Write up your findings
 
-Add a short interpretation (4 to 6 sentences) to this README or a `RESULT.md`:
-- Which system is better overall, and on which metric(s)?
-- Which queries did keyword search win, and what do those queries have in common?
-- Which queries did semantic search win, and what do those have in common?
-- One sentence on why a team would still keep the weaker system around (hint: the two systems win on different queries).
+### Result Table
+| Query | Keyword rank | Semantic rank |
+|---|---|---|
+| my redis cache keeps showing old data | 8 | 1 |
+| how do I add semantic search to a table I already have | miss | 2 |
+| redis or memcached for caching | 1 | 2 |
+| why did my query get slower after I added an index | miss | 1 |
+| what does ACID actually guarantee | 2 | 1 |
+| how do I keep my postgres online while changing the schema | 6 | 3 |
+| my background jobs stop after every deploy | miss | 2 |
+| how do I let my database accept more writes per second | 4 | 1 |
+| sql or nosql for a new product | 1 | 3 |
+| why does my redis memory keep climbing | miss | 2 |
+| **Summary** | **MRR 0.30 · Recall@10 0.60** | **MRR 0.67 · Recall@10 1.00** |
+
+### Interpretation
+Overall, semantic search outperforms keyword search by a wide margin across both metrics, achieving an MRR of 0.67 compared to 0.30, and a perfect Recall@10 of 1.00 compared to 0.60. Keyword search performed best on queries containing specific technical terms and direct comparisons where exact terminology matters, such as `"redis or memcached for caching"` (rank 1 vs 2) and `"sql or nosql for a new product"` (rank 1 vs 3). In contrast, semantic search dominated on natural-language troubleshooting, symptoms, and descriptive questions such as `"why did my query get slower after I added an index"`, `"my background jobs stop after every deploy"`, and `"my redis cache keeps showing old data"`, where keyword search suffered multiple misses due to vocabulary mismatch. Despite scoring lower overall, an engineering team would still keep keyword search around because the two retrieval models complement each other on fundamentally different query types, making a hybrid search system (combining BM25 and vector search via Reciprocal Rank Fusion) superior to either approach in isolation.
 
 ## Take it further (optional)
 
